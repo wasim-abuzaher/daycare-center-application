@@ -3,6 +3,7 @@ import {
     ActivityIndicator,
     Button,
     Modal,
+    SafeAreaView,
     ScrollView,
     StyleSheet,
     Text,
@@ -51,9 +52,6 @@ export function ClassroomView({
             .update({
                 checked_in: newValue,
             })
-            .then(() =>
-                ToastAndroid.show('Check in status updated', ToastAndroid.SHORT)
-            )
             .catch(() =>
                 ToastAndroid.show(
                     'Check in update was unsuccessful',
@@ -78,34 +76,37 @@ export function ClassroomView({
             );
 
             if (child && newClassroomIndex !== -1) {
-                let updatedClassroom: Array<Child> = [];
-                const newClassroomReference = database().ref(
+                const updatedNewClassroomChildren: Array<Child> =
+                    newClassroom.children
+                        ? [...newClassroom.children, child]
+                        : [child];
+                const newClassroomChildrenReference = database().ref(
                     `/data/center/classrooms/${newClassroomIndex}/children`
                 );
-                await newClassroomReference.once('value', snapshot => {
-                    updatedClassroom = snapshot.val()
-                        ? [...snapshot.val(), child]
-                        : [child];
-                });
-                newClassroomReference
-                    .set(updatedClassroom)
-                    .then(async () => {
-                        const updatedClassroomChildren = [
-                            ...currentClassroomChildren,
-                        ];
-                        updatedClassroomChildren.splice(moveChildIndex, 1);
-                        await database()
-                            .ref(`/data/center/classrooms/${index}/children`)
-                            .set(updatedClassroomChildren);
-                    })
-                    .finally(() => {
-                        setMoveChildIndex(-1);
-                        onChildMove();
-                        ToastAndroid.show(
-                            `${child.fullName} has been moved to ${newClassroom.name}`,
-                            ToastAndroid.LONG
-                        );
-                    });
+
+                const updatedCurrentClassroomChildren = [
+                    ...currentClassroomChildren,
+                ];
+                updatedCurrentClassroomChildren.splice(moveChildIndex, 1);
+                const currentClassroomChildrenReference = database().ref(
+                    `/data/center/classrooms/${index}/children`
+                );
+
+                setMoveChildIndex(-1);
+
+                await newClassroomChildrenReference.set(
+                    updatedNewClassroomChildren
+                );
+                await currentClassroomChildrenReference.set(
+                    updatedCurrentClassroomChildren
+                );
+
+                onChildMove();
+
+                ToastAndroid.show(
+                    `${child.fullName} has been moved to ${newClassroom.name}`,
+                    ToastAndroid.LONG
+                );
             }
         }
     };
@@ -213,11 +214,11 @@ export function ClassroomView({
     };
 
     return (
-        <View>
+        <SafeAreaView>
             {renderClassroom()}
             {renderButton()}
             {renderLoading()}
-        </View>
+        </SafeAreaView>
     );
 }
 
@@ -233,7 +234,7 @@ const styles = StyleSheet.create({
         paddingBottom: 8,
     },
     scrollView: {
-        marginBottom: 120,
+        marginBottom: 60,
         paddingBottom: 8,
     },
     listItem: {
