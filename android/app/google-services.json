@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "213587495996",
+    "firebase_url": "https://himama-c176a-default-rtdb.firebaseio.com",
+    "project_id": "himama-c176a",
+    "storage_bucket": "himama-c176a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:213587495996:android:1f3eff521bb96dfcf74739",
+        "android_client_info": {
+          "package_name": "com.himama"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "213587495996-33e5q5qugdq5i0pmb23g3bha1gbper11.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC1rxkcFqsHq5P0Hark0UT0McBZ4cqKegA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "213587495996-33e5q5qugdq5i0pmb23g3bha1gbper11.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
