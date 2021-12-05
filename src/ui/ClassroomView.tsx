@@ -12,43 +12,35 @@ import {
     View,
 } from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
-import {Center, Child, Classroom} from '../types';
+import {AppStackParamList, Child, Classroom} from '../types';
 import database from '@react-native-firebase/database';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
 
-interface Props {
-    center: Center;
-    classroom: Classroom;
-    index: number;
-    onClose: () => void;
-    onChildMove: () => void;
-}
+type Props = NativeStackScreenProps<AppStackParamList, 'Classroom'>;
 
-export function ClassroomView({
-    center,
-    index,
-    onClose,
-    onChildMove,
-}: Props): React.ReactElement {
+export function ClassroomView({navigation, route}: Props): React.ReactElement {
     const [classroom, setClassroom] = useState<Classroom | null>(null);
     const [moveChildIndex, setMoveChildIndex] = useState<number>(-1);
 
     useEffect(() => {
         const reference = database()
-            .ref(`data/center/classrooms/${index}`)
+            .ref(`data/center/classrooms/${route.params.index}`)
             .on('value', snapshot => {
                 setClassroom(snapshot.val());
             });
 
         // Stop listening for updates when no longer required
         return () => database().ref('/data/center').off('value', reference);
-    }, [index]);
+    }, [route.params.index]);
 
     const onChildCheckInStatusChange = (
         newValue: boolean,
         childIndex: number
     ) => {
         database()
-            .ref(`/data/center/classrooms/${index}/children/${childIndex}`)
+            .ref(
+                `/data/center/classrooms/${route.params.index}/children/${childIndex}`
+            )
             .update({
                 checked_in: newValue,
             })
@@ -67,7 +59,7 @@ export function ClassroomView({
     const onMoveToClassroomClick = async (newClassroom: Classroom) => {
         if (classroom && classroom.children) {
             const currentClassroomChildren: Array<Child> = classroom.children;
-            const newClassroomIndex = center.classrooms.findIndex(
+            const newClassroomIndex = route.params.center.classrooms.findIndex(
                 c => c.id === newClassroom.id
             );
 
@@ -81,27 +73,25 @@ export function ClassroomView({
                         ? [...newClassroom.children, child]
                         : [child];
                 const newClassroomChildrenReference = database().ref(
-                    `/data/center/classrooms/${newClassroomIndex}/children`
+                    `/data/center/classrooms/${newClassroomIndex}`
                 );
 
                 const updatedCurrentClassroomChildren = [
                     ...currentClassroomChildren,
                 ];
                 updatedCurrentClassroomChildren.splice(moveChildIndex, 1);
-                const currentClassroomChildrenReference = database().ref(
-                    `/data/center/classrooms/${index}/children`
+                const currentClassroomReference = database().ref(
+                    `/data/center/classrooms/${route.params.index}`
                 );
 
                 setMoveChildIndex(-1);
 
-                await newClassroomChildrenReference.set(
-                    updatedNewClassroomChildren
-                );
-                await currentClassroomChildrenReference.set(
-                    updatedCurrentClassroomChildren
-                );
-
-                onChildMove();
+                await newClassroomChildrenReference.update({
+                    children: updatedNewClassroomChildren,
+                });
+                await currentClassroomReference.update({
+                    children: updatedCurrentClassroomChildren,
+                });
 
                 ToastAndroid.show(
                     `${child.fullName} has been moved to ${newClassroom.name}`,
@@ -131,8 +121,8 @@ export function ClassroomView({
                 }}>
                 <Text style={styles.title}>Move Child To:</Text>
                 <ScrollView>
-                    {center.classrooms
-                        .filter((c, i) => i !== index)
+                    {route.params.center.classrooms
+                        .filter((c, i) => i !== route.params.index)
                         .map(c => {
                             return (
                                 <TouchableOpacity
@@ -184,7 +174,8 @@ export function ClassroomView({
                                                     }
                                                 />
                                             </View>
-                                            {center.allClassroomsAccessible && (
+                                            {route.params.center
+                                                .allClassroomsAccessible && (
                                                 <Button
                                                     title={'Move'}
                                                     onPress={() =>
@@ -208,7 +199,10 @@ export function ClassroomView({
     const renderButton = () => {
         return (
             <View style={styles.returnButtonView}>
-                <Button title={'Return'} onPress={onClose} />
+                <Button
+                    title={'Return'}
+                    onPress={() => navigation.navigate('Center')}
+                />
             </View>
         );
     };

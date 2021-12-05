@@ -1,5 +1,7 @@
-import React, {useEffect, useState} from 'react';
-import {Center} from '../types';
+import React, {useState} from 'react';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {useFocusEffect} from '@react-navigation/native';
+import {AppStackParamList, Center} from '../types';
 import database from '@react-native-firebase/database';
 import {
     SafeAreaView,
@@ -9,16 +11,12 @@ import {
     ToastAndroid,
     View,
 } from 'react-native';
-import {ClassroomView} from './ClassroomView';
 import {ClassroomCard} from './ClassroomCard';
 
-interface Props {}
+type Props = NativeStackScreenProps<AppStackParamList, 'Center'>;
 
-export function CenterView({}: Props): React.ReactElement {
+export function CenterView({navigation}: Props): React.ReactElement {
     const [center, setCenter] = useState<Center | null>(null);
-    const [selectedClassroom, setSelectedClassroom] = useState<number | null>(
-        null
-    );
 
     const fetchCenter = () => {
         database()
@@ -35,41 +33,26 @@ export function CenterView({}: Props): React.ReactElement {
     };
 
     // This useEffect will fetch the center for the first time, or show a toast message if it fails
-    useEffect(() => {
-        if (!center) {
-            fetchCenter();
-        }
-    }, [center]);
+    useFocusEffect(() => {
+        fetchCenter();
+    });
 
     const onClassroomClick = (index: number) => {
-        setSelectedClassroom(index);
-    };
-
-    const onChildMove = () => {
-        fetchCenter();
-    };
-
-    if (center && selectedClassroom !== null) {
-        const classroom = center.classrooms[selectedClassroom];
-
-        if (!classroom) {
-            return (
-                <View>
-                    <Text>Couldn't load the classroom</Text>
-                </View>
-            );
+        if (center) {
+            const classroom = center.classrooms[index];
+            if (classroom) {
+                navigation.navigate('Classroom', {
+                    center,
+                    index,
+                });
+            } else {
+                ToastAndroid.show(
+                    "We couldn't navigate to classroom",
+                    ToastAndroid.LONG
+                );
+            }
         }
-
-        return (
-            <ClassroomView
-                center={center}
-                classroom={classroom}
-                index={selectedClassroom}
-                onChildMove={onChildMove}
-                onClose={() => setSelectedClassroom(null)}
-            />
-        );
-    }
+    };
 
     return (
         <SafeAreaView>
