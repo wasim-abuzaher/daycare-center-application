@@ -11,7 +11,7 @@ import {
     ToastAndroid,
     View,
 } from 'react-native';
-import {ClassroomCard} from './ClassroomCard';
+import {ClassroomCard} from '../ui';
 
 type Props = NativeStackScreenProps<AppStackParamList, 'Center'>;
 
