@@ -22,7 +22,11 @@ exports[`renders ClassroomCard correctly should match snapshot 1`] = `
   <View
     style={
       Object {
-        "marginTop": 32,
+        "borderBottomColor": "#c1c1c1",
+        "borderBottomWidth": 1,
+        "display": "flex",
+        "height": 120,
+        "justifyContent": "center",
         "paddingHorizontal": 24,
       }
     }
@@ -37,19 +41,103 @@ exports[`renders ClassroomCard correctly should match snapshot 1`] = `
     >
       Mock Class
     </Text>
-    <Text
+    <View
       style={
         Object {
-          "fontSize": 18,
-          "fontWeight": "400",
-          "marginTop": 8,
+          "alignItems": "baseline",
+          "display": "flex",
+          "flexDirection": "row",
+          "justifyContent": "space-between",
         }
       }
     >
-      Children:
-       
-      1
-    </Text>
+      <Text
+        style={
+          Object {
+            "fontSize": 18,
+            "fontWeight": "400",
+            "marginTop": 8,
+          }
+        }
+      >
+        Children:
+         
+        1
+      </Text>
+      <View
+        style={
+          Object {
+            "alignItems": "baseline",
+            "display": "flex",
+            "flexDirection": "row",
+            "justifyContent": "space-between",
+          }
+        }
+      >
+        <Text
+          allowFontScaling={false}
+          style={
+            Array [
+              Object {
+                "color": undefined,
+                "fontSize": 20,
+              },
+              undefined,
+              Object {
+                "fontFamily": "Material Icons",
+                "fontStyle": "normal",
+                "fontWeight": "normal",
+              },
+              Object {},
+            ]
+          }
+        >
+          
+        </Text>
+        <Text
+          style={
+            Object {
+              "fontSize": 18,
+              "fontWeight": "400",
+              "marginHorizontal": 4,
+            }
+          }
+        >
+          0
+        </Text>
+        <Text
+          allowFontScaling={false}
+          style={
+            Array [
+              Object {
+                "color": undefined,
+                "fontSize": 20,
+              },
+              undefined,
+              Object {
+                "fontFamily": "Material Icons",
+                "fontStyle": "normal",
+                "fontWeight": "normal",
+              },
+              Object {},
+            ]
+          }
+        >
+          
+        </Text>
+        <Text
+          style={
+            Object {
+              "fontSize": 18,
+              "fontWeight": "400",
+              "marginHorizontal": 4,
+            }
+          }
+        >
+          1
+        </Text>
+      </View>
+    </View>
   </View>
 </View>
 `;

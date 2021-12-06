@@ -1,2 +1,2 @@
-export * from './CenterView';
-export * from './ClassroomView';
+export * from './CenterScreen';
+export * from './ClassroomScreen';

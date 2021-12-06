@@ -18,7 +18,10 @@ import {NativeStackScreenProps} from '@react-navigation/native-stack';
 
 type Props = NativeStackScreenProps<AppStackParamList, 'Classroom'>;
 
-export function ClassroomView({navigation, route}: Props): React.ReactElement {
+export function ClassroomScreen({
+    navigation,
+    route,
+}: Props): React.ReactElement {
     const [classroom, setClassroom] = useState<Classroom | null>(null);
     const [moveChildIndex, setMoveChildIndex] = useState<number>(-1);
 
@@ -129,7 +132,7 @@ export function ClassroomView({navigation, route}: Props): React.ReactElement {
                                     key={c.id}
                                     style={styles.listItem}
                                     onPress={() => onMoveToClassroomClick(c)}>
-                                    <Text style={styles.description}>
+                                    <Text style={styles.modalDescription}>
                                         {c.name}
                                     </Text>
                                 </TouchableOpacity>
@@ -232,22 +235,31 @@ const styles = StyleSheet.create({
         paddingBottom: 8,
     },
     listItem: {
-        marginTop: 12,
-        marginBottom: 8,
+        height: 96,
         paddingHorizontal: 24,
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
+        borderBottomColor: '#c1c1c1',
+        borderBottomWidth: 1,
     },
     title: {
         fontSize: 24,
-        paddingHorizontal: 24,
+        padding: 20,
         fontWeight: '600',
+        borderBottomColor: '#c1c1c1',
+        borderBottomWidth: 1,
+        textAlign: 'center',
     },
     description: {
         marginTop: 8,
         fontSize: 18,
+        fontWeight: '400',
+    },
+    modalDescription: {
+        marginTop: 8,
+        fontSize: 24,
         fontWeight: '400',
     },
     actions: {

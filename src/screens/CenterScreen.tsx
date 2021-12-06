@@ -15,7 +15,7 @@ import {ClassroomCard} from '../ui';
 
 type Props = NativeStackScreenProps<AppStackParamList, 'Center'>;
 
-export function CenterView({navigation}: Props): React.ReactElement {
+export function CenterScreen({navigation}: Props): React.ReactElement {
     const [center, setCenter] = useState<Center | null>(null);
 
     const fetchCenter = () => {
@@ -79,7 +79,10 @@ export function CenterView({navigation}: Props): React.ReactElement {
 const styles = StyleSheet.create({
     title: {
         fontSize: 24,
-        paddingHorizontal: 24,
+        padding: 24,
         fontWeight: '600',
+        borderBottomColor: '#c1c1c1',
+        borderBottomWidth: 1,
+        textAlign: 'center',
     },
 });
