@@ -18,6 +18,9 @@ type Props = NativeStackScreenProps<AppStackParamList, 'Center'>;
 export function CenterScreen({navigation}: Props): React.ReactElement {
     const [center, setCenter] = useState<Center | null>(null);
 
+    /**
+     * Connect to Firebase database to fetch center
+     */
     const fetchCenter = () => {
         database()
             .ref('/data/center')
@@ -32,11 +35,17 @@ export function CenterScreen({navigation}: Props): React.ReactElement {
             });
     };
 
-    // This useEffect will fetch the center for the first time, or show a toast message if it fails
+    /**
+     * Fetch the center when this view gets focus
+     */
     useFocusEffect(() => {
         fetchCenter();
     });
 
+    /**
+     * Navigates to the Classroom screen
+     * @param index
+     */
     const onClassroomClick = (index: number) => {
         if (center) {
             const classroom = center.classrooms[index];

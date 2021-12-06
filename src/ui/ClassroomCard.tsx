@@ -14,6 +14,11 @@ export function ClassroomCard({
     index,
     onClassroomClick,
 }: Props): React.ReactElement {
+    /**
+     * Function that returns the number of children who are checked in or checked out of the classroom,
+     * or 0 if classroom doesn't have children
+     * @param arg one of 'in' or 'out'
+     */
     const getStat = (arg: string): number => {
         if (!classroom.children) {
             return 0;
@@ -27,6 +32,7 @@ export function ClassroomCard({
             ? checkedInChildren
             : totalChildren - checkedInChildren;
     };
+
     return (
         <TouchableOpacity onPress={() => onClassroomClick(index)}>
             <View style={styles.container}>

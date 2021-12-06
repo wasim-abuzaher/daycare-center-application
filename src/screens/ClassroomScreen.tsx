@@ -25,6 +25,10 @@ export function ClassroomScreen({
     const [classroom, setClassroom] = useState<Classroom | null>(null);
     const [moveChildIndex, setMoveChildIndex] = useState<number>(-1);
 
+    /**
+     * Connect to Firebase database to fetch classroom,
+     * and registers a change listener to update view automatically
+     */
     useEffect(() => {
         const reference = database()
             .ref(`data/center/classrooms/${route.params.index}`)
@@ -36,6 +40,11 @@ export function ClassroomScreen({
         return () => database().ref('/data/center').off('value', reference);
     }, [route.params.index]);
 
+    /**
+     * Connect to Firebase database to change the check-in status of the child
+     * @param newValue
+     * @param childIndex
+     */
     const onChildCheckInStatusChange = (
         newValue: boolean,
         childIndex: number
@@ -55,10 +64,18 @@ export function ClassroomScreen({
             );
     };
 
+    /**
+     * Sets the child index to trigger the move modal to open
+     * @param childIndex
+     */
     const onChildMoveButtonClick = (childIndex: number) => {
         setMoveChildIndex(childIndex);
     };
 
+    /**
+     * Connect to Firebase database to swap the classroom of the child selected
+     * @param newClassroom
+     */
     const onMoveToClassroomClick = async (newClassroom: Classroom) => {
         if (classroom && classroom.children) {
             const currentClassroomChildren: Array<Child> = classroom.children;
